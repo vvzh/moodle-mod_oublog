@@ -2041,7 +2041,7 @@ function oublog_individual_get_activity_details($cm, $urlroot, $oublog, $current
 
     if ($allowedindividuals) {
         foreach ($allowedindividuals as $user) {
-            $menu[$user->id] = format_string($user->firstname . ' ' . $user->lastname);
+            $menu[$user->id] = format_string(fullname($user));
         }
     }
 
