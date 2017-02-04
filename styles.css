@@ -104,6 +104,10 @@
     margin-right: 1em;
 }
 
+.oublog-post-links span.oublog_links_comment {
+    display: block;
+}
+
 .oublog-postedby {
     margin-top: 0.4em;
     margin-bottom: 0.4em;
@@ -159,7 +163,7 @@
 }
 
 .oublog-post .oublog-post-attachment {
-    display: inline;
+    display: block;
     word-break: break-all;
     margin-right: .75em;
 }
