@@ -47,7 +47,8 @@ class mod_oublog_mod_form extends moodleform_mod {
         if (!defined('OUBLOG_EDIT_INSTANCE')) {
             $this->standard_intro_elements(get_string('oublogintro', 'oublog'));
             // Adding the "allowcomments" field.
-            $options = array(OUBLOG_COMMENTS_ALLOW => get_string('logincomments', 'oublog'),
+            $options = array(OUBLOG_COMMENTS_FORCEALLOW => get_string('logincommentsforced', 'oublog'),
+                    OUBLOG_COMMENTS_ALLOW => get_string('logincomments', 'oublog'),
                     OUBLOG_COMMENTS_ALLOWPUBLIC => get_string('publiccomments', 'oublog'),
                     OUBLOG_COMMENTS_PREVENT => get_string('nocomments', 'oublog'));
 

@@ -44,6 +44,7 @@ define('OUBLOG_VISIBILITY_PUBLIC',       300);
 define('OUBLOG_COMMENTS_PREVENT', 0);
 define('OUBLOG_COMMENTS_ALLOW',   1);
 define('OUBLOG_COMMENTS_ALLOWPUBLIC', 2);
+define('OUBLOG_COMMENTS_FORCEALLOW', -1); // for blogs only, not for posts
 /**#@-*/
 
 /**#@+
@@ -251,7 +252,7 @@ function oublog_can_comment($cm, $oublog, $post, $ignoretime = false) {
         // still be able to make comments by logging out, but these will then
         // go through moderation.
         $blogok =
-                (!isloggedin() && $oublog->allowcomments == OUBLOG_COMMENTS_ALLOWPUBLIC) ||
+                (!isloggedin() && abs($oublog->allowcomments) == OUBLOG_COMMENTS_ALLOWPUBLIC) ||
                 has_capability('mod/oublog:contributepersonal',
                     context_system::instance());
     } else {
@@ -659,6 +660,8 @@ function oublog_get_posts($oublog, $context, $offset = 0, $cm, $groupid, $indivi
             }
             if ($oublog->allowcomments == OUBLOG_COMMENTS_PREVENT) {
                 $post->allowcomments = OUBLOG_COMMENTS_PREVENT;
+            } else if ($oublog->allowcomments == OUBLOG_COMMENTS_FORCEALLOW) {
+                $post->allowcomments = OUBLOG_COMMENTS_ALLOW;
             }
 
             $posts[$post->id] = $post;
@@ -715,7 +718,7 @@ function oublog_get_posts($oublog, $context, $offset = 0, $cm, $groupid, $indivi
     }
     $rs->close();
     // Get count of comments waiting approval for posts on the page...
-    if ($oublog->allowcomments >= OUBLOG_COMMENTS_ALLOWPUBLIC) {
+    if (abs($oublog->allowcomments) >= OUBLOG_COMMENTS_ALLOWPUBLIC) {
         // Make list of all posts that allow public comments
         $publicallowed = array();
         foreach ($posts as $post) {
@@ -2674,7 +2677,7 @@ function oublog_add_comment_moderated($oublog, $oubloginstance, $post, $comment)
 function oublog_get_moderated_comments($oublog, $post, $includeset=false) {
     global $DB;
     // Don't bother checking if public comments are not allowed
-    if ($oublog->allowcomments < OUBLOG_COMMENTS_ALLOWPUBLIC
+    if (abs($oublog->allowcomments) < OUBLOG_COMMENTS_ALLOWPUBLIC
             && $post->allowcomments < OUBLOG_COMMENTS_ALLOWPUBLIC) {
         return array();
     }
@@ -4187,7 +4190,7 @@ function oublog_stats_output_participation($oublog, $cm, $renderer = null, $cour
         // Dont want to see posts on personal blogs.
         $getposts = false;
     }
-    if ($oublog->allowcomments < OUBLOG_COMMENTS_ALLOW ) {
+    if (abs($oublog->allowcomments) < OUBLOG_COMMENTS_ALLOW ) {
         // Dont want to see comments visible individual blogs.
         $getcomments = false;
     }
@@ -4419,7 +4422,7 @@ function oublog_get_participation_details($oublog, $groupid, $individual,
     $gmgroup = $gminner = $groupcheck = $postvisibility = $postallowcomments = '';
     $period = $cperiod = $limitcount = $thispostuser = $thiscommentuser = '';
     $visibility = OUBLOG_VISIBILITY_COURSEUSER;
-    if ($oublog->allowcomments >= OUBLOG_COMMENTS_ALLOW) {
+    if (abs($oublog->allowcomments) >= OUBLOG_COMMENTS_ALLOW) {
         $allowcomments = OUBLOG_COMMENTS_ALLOW;
     } else {
         $allowcomments = OUBLOG_COMMENTS_PREVENT;

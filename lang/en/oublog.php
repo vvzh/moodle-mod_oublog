@@ -78,6 +78,7 @@ $string['tags'] = 'Tags';
 $string['tagsfield'] = 'Tags (separated by commas)';
 $string['allowcomments'] = 'Allow comments';
 $string['allowcommentsmax'] = 'Allow comments (if chosen for post)';
+$string['logincommentsforced'] = 'Yes, from logged-in users, for all posts';
 $string['logincomments'] = 'Yes, from logged-in users';
 $string['permalink'] = 'Permalink';
 $string['publiccomments'] = 'Yes, from everybody (even if not logged in)';
@@ -385,9 +386,11 @@ $string['displayversion'] = 'OU blog version: <strong>{$a}</strong>';
 $string['pluginadministration'] = 'OU Blog administration';
 $string['pluginname'] = 'OU Blog';
 // Help strings.
-$string['allowcomments_help'] = '&lsquo;Yes, from signed-on users&rsquo; allows comments from users who have access to the post.
+$string['allowcomments_help'] = '&lsquo;Yes, from logged-in users, for all posts&rsquo; allows comments from users who have access to the post for all posts and prevents changes in comment settings for individual posts.
 
-&lsquo;Yes, from everybody&rsquo; allows comments from users and from the general public. You will receive emails to approve or reject comments from users who are not signed in.
+&lsquo;Yes, from logged-in users&rsquo; allows comments from users who have access to the post. Post authors can disable comments for individual posts.
+
+&lsquo;Yes, from everybody&rsquo; allows comments from users and from the general public. You will receive emails to approve or reject comments from users who are not signed in. Post authors can disable or restrict comments for individual posts.
 
 &lsquo;No&rsquo; prevents anyone from making a comment on this post.';
 $string['individualblogs_help'] = '

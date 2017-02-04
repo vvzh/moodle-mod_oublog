@@ -83,7 +83,7 @@ if ($USER->id !== $post->userid ||
 
 // The post must (still) allow public comments
 if ($post->allowcomments < OUBLOG_COMMENTS_ALLOWPUBLIC ||
-    $oublog->allowcomments < OUBLOG_COMMENTS_ALLOWPUBLIC) {
+    abs($oublog->allowcomments) < OUBLOG_COMMENTS_ALLOWPUBLIC) {
     print_error('error_moderatednotallowed', 'oublog', $backlink);
 }
 

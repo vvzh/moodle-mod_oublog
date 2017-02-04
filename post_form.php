@@ -76,7 +76,13 @@ class mod_oublog_post_form extends moodleform {
         }
 
         $options = array();
-        if ($allowcomments) {
+        if (!$allowcomments) {
+            $mform->addElement('hidden', 'allowcomments', OUBLOG_COMMENTS_PREVENT);
+            $mform->setType('allowcomments', PARAM_INT);
+        } else if ($allowcomments == OUBLOG_COMMENTS_FORCEALLOW) {
+            $mform->addElement('hidden', 'allowcomments', OUBLOG_COMMENTS_ALLOW);
+            $mform->setType('allowcomments', PARAM_INT);
+        } else {
             $options[OUBLOG_COMMENTS_ALLOW] = get_string('logincomments', 'oublog');
             if ($allowcomments >= OUBLOG_COMMENTS_ALLOWPUBLIC
                 && OUBLOG_VISIBILITY_PUBLIC <= $maxvisibility) {
@@ -93,9 +99,6 @@ class mod_oublog_post_form extends moodleform {
                 // NOTE - module.js adds a listener to allowcomments that hides/shows this element as mforms doesn't support this.
                 $mform->addElement('static', 'publicwarning', '', '<div id="publicwarningmarker"></div>'. get_string('publiccomments_info', 'oublog'));
             }
-        } else {
-            $mform->addElement('hidden', 'allowcomments', OUBLOG_COMMENTS_PREVENT);
-            $mform->setType('allowcomments', PARAM_INT);
         }
 
         $options = array();
