@@ -1950,7 +1950,7 @@ function oublog_date($time, $insentence = false) {
     if (function_exists('specially_shrunken_date')) {
         return specially_shrunken_date($time, $insentence);
     } else {
-        return userdate($time);
+        return userdate($time, get_string('strftimedatetimeshort'));
     }
 }
 
