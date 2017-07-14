@@ -2102,8 +2102,10 @@ function oublog_individual_get_all_users($courseid, $oublogid, $currentgroup=0, 
     // Add present user to the list.
     $currentuser = array();
     $user = new stdClass;
-    $user->firstname = $USER->firstname;
-    $user->lastname = $USER->lastname;
+    $fields = get_all_user_name_fields();
+    foreach ($fields as $field) {
+        $user->$field = $USER->$field;
+    }
     $user->id = $USER->id;
     $currentuser[$USER->id] = $user;
     if ($context && !has_capability('mod/oublog:viewindividual', $context)) {
@@ -2135,9 +2137,10 @@ function oublog_individual_get_all_users($courseid, $oublogid, $currentgroup=0, 
 
 function oublog_individual_get_users_who_posted_to_this_blog($oublogid, $currentgroup=0) {
     global $DB;
+    $fields = get_all_user_name_fields(true, 'u');
     $params = array();
     if ($currentgroup > 0) {
-        $sql = "SELECT u.id, u.firstname, u.lastname
+        $sql = "SELECT u.id, $fields
                 FROM {user} u
                 INNER JOIN {oublog_instances} bi
                 ON bi.oublogid = ? AND bi.userid = u.id
@@ -2148,7 +2151,7 @@ function oublog_individual_get_users_who_posted_to_this_blog($oublogid, $current
         $params[] = $oublogid;
         $params[] = $currentgroup;
     } else {
-        $sql = "SELECT u.id, u.firstname, u.lastname
+        $sql = "SELECT u.id, $fields
             FROM {user} u
             JOIN {oublog_instances} bi
             ON bi.oublogid = $oublogid AND bi.userid = u.id
