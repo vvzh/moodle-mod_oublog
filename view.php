@@ -605,6 +605,17 @@ if (isguestuser() && $USER->id == $user) {
     print '<p class="oublog_noposts">' . $errormessage . ' </p>';
 }
 
+if ($eiosinfomode) {
+    $np = optional_param('np', '', PARAM_NOTAGS);
+    $sy = optional_param('sy', 0, PARAM_INT); // Study year
+    $backurl = new moodle_url($PAGE->url, array('individual' => 0, 'np' => $np));
+    if ($sy) {
+        $backurl->param('sy', $sy);
+    }
+    $backurl->remove_params('user', 'page', 'tag', 'tagorder');
+    echo $OUTPUT->single_button($backurl, 'Назад', 'get');
+}
+
 // Log oublog page view.
 $params = array(
     'context' => $context,
