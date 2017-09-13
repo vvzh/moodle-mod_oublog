@@ -205,6 +205,44 @@ if ($oublog->individual) {
     }
 }
 
+$eiosinfomode = false;
+$eiosinfodir = dirname(__FILE__).'/../eiosinfo';
+if (is_file("$eiosinfodir/locallib.php")) {
+    require_once "$eiosinfodir/locallib.php";
+    $eiosinfomode = true;
+}
+if ($eiosinfomode && !$currentindividual) {
+    $edudata = require_once "$eiosinfodir/edudata.php";
+    $fullnp = [];
+    foreach ($edudata as $level) {
+        foreach ($level as $row) {
+            $fullnp[$row['eduCode']] = "$row[eduCode] $row[eduName]";
+        }
+    }
+    $np = optional_param('np', '', PARAM_NOTAGS);
+    $sy = optional_param('sy', 0, PARAM_INT); // Study year
+    $headinglevel = 3;
+    $currenturl = new moodle_url($PAGE->url);
+    $currenturl->remove_params('user', 'page', 'tag', 'tagorder');
+    $currenturl->param('individual', 0);
+    echo $OUTPUT->header();
+    if ($np) {
+        $details = '&laquo;' . $fullnp[$np] . '&raquo;';
+        if ($sy) {
+            $details .= " ($sy курс)";
+        }
+        $useridshavingportfoliorecords = eiosinfo_get_userids_having_oublog_posts($cm->id);
+        echo $OUTPUT->heading("Обучающиеся по направлению $details", $headinglevel);
+        eiosinfo_render_learners($np, $sy, $currenturl, 'individual', $useridshavingportfoliorecords);
+        echo $OUTPUT->single_button($currenturl, 'Назад', 'get');
+    } else {
+        echo $OUTPUT->heading('Обучающиеся по направлениям', $headinglevel);
+        eiosinfo_render_menu($edudata, $currenturl);
+    }
+    echo $OUTPUT->footer();
+    exit();
+}
+
 // Get Posts.
 list($posts, $recordcount) = oublog_get_posts($oublog, $context, $offset, $cm, $currentgroup,
         $currentindividual, $oubloguser->id, $tag, $canaudit);
