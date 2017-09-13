@@ -456,7 +456,7 @@ if ($oublog->individual) {
     if ($individualdetails) {
         if ($eiosinfomode) {
             $user = $DB->get_record('user', array('id' => $individualdetails->activeindividual));
-            echo html_writer::tag("h3", 'Портфолио обучающегося:<br>' . fullname($user));
+            echo html_writer::tag("h3", fullname($user));
         } else {
             echo $individualdetails->display;
         }
