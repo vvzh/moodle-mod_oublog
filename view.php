@@ -454,7 +454,12 @@ if ($showgroupselector) {
 // Print Individual.
 if ($oublog->individual) {
     if ($individualdetails) {
-        echo $individualdetails->display;
+        if ($eiosinfomode) {
+            $user = $DB->get_record('user', array('id' => $individualdetails->activeindividual));
+            echo html_writer::tag("h3", 'Портфолио обучающегося:<br>' . fullname($user));
+        } else {
+            echo $individualdetails->display;
+        }
         $individualmode = $individualdetails->mode;
         $currentindividual = $individualdetails->activeindividual;
     }
