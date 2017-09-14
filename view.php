@@ -236,7 +236,14 @@ if ($eiosinfomode && !$currentindividual) {
         eiosinfo_render_learners($np, $sy, $currenturl, 'individual', $useridshavingportfoliorecords);
         echo $OUTPUT->single_button($currenturl, 'Назад', 'get');
     } else {
-        echo $OUTPUT->heading('Обучающиеся по направлениям', $headinglevel);
+        // $canpost is not enough, it is true even if user cannot actually post
+        if (oublog_can_post($oublog, isset($oubloginstance) ? $oubloginstance->userid : 0, $cm)) {
+            $individualurl = new moodle_url($currenturl, array('individual' => $USER->id));
+            echo $OUTPUT->heading(html_writer::link($individualurl, 'Моё портфолио'), $headinglevel);
+            echo $OUTPUT->heading('Портфолио других обучающихся', $headinglevel);
+        } else {
+            echo $OUTPUT->heading('Обучающиеся по направлениям', $headinglevel);
+        }
         eiosinfo_render_menu($edudata, $currenturl);
     }
     echo $OUTPUT->footer();
@@ -608,7 +615,10 @@ if (isguestuser() && $USER->id == $user) {
 if ($eiosinfomode) {
     $np = optional_param('np', '', PARAM_NOTAGS);
     $sy = optional_param('sy', 0, PARAM_INT); // Study year
-    $backurl = new moodle_url($PAGE->url, array('individual' => 0, 'np' => $np));
+    $backurl = new moodle_url($PAGE->url, array('individual' => 0));
+    if ($np) {
+        $backurl->param('np', $np);
+    }
     if ($sy) {
         $backurl->param('sy', $sy);
     }
