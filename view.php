@@ -216,7 +216,9 @@ if ($eiosinfomode && !$currentindividual) {
     $fullnp = [];
     foreach ($edudata as $level) {
         foreach ($level as $row) {
-            $fullnp[$row['eduCode']] = "$row[eduCode] $row[eduName]";
+            if (isset($row['eduCode']) && isset($row['eduName'])) {
+                $fullnp[$row['eduCode']] = "$row[eduCode] $row[eduName]";
+            }
         }
     }
     $np = optional_param('np', '', PARAM_NOTAGS);
@@ -226,7 +228,7 @@ if ($eiosinfomode && !$currentindividual) {
     $currenturl->remove_params('user', 'page', 'tag', 'tagorder');
     $currenturl->param('individual', 0);
     echo $OUTPUT->header();
-    if ($np) {
+    if ($np && isset($fullnp[$np])) {
         $details = '&laquo;' . $fullnp[$np] . '&raquo;';
         if ($sy) {
             $details .= " ($sy курс)";
